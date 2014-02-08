@@ -46,10 +46,10 @@ void TestMQTT_Logic::test_setTopic()
 {
     MQTT_Logic mqttLogic[4];
 
-    QCOMPARE( true, mqttLogic[0].setTopic("in_0", "out_0") );
-    QCOMPARE( true, mqttLogic[1].setTopic("in_1", "out_1") );
-    QCOMPARE( true, mqttLogic[2].setTopic("in_2", "out_2") );
-    QCOMPARE( true, mqttLogic[3].setTopic("in_3", "out_3") );
+    QCOMPARE( true, mqttLogic[0].setTopic((char*)"in_0", (char*)"out_0") );
+    QCOMPARE( true, mqttLogic[1].setTopic((char*)"in_1", (char*)"out_1") );
+    QCOMPARE( true, mqttLogic[2].setTopic((char*)"in_2", (char*)"out_2") );
+    QCOMPARE( true, mqttLogic[3].setTopic((char*)"in_3", (char*)"out_3") );
 
     QCOMPARE( mqttLogic[0].getTopicSubscribe(), "in_0" );
     QCOMPARE( mqttLogic[0].getTopicPublish(),   "out_0" );
@@ -65,14 +65,14 @@ void TestMQTT_Logic::test_setTopic()
 void TestMQTT_Logic::test_checkTopic()
 {
     MQTT_Logic mqttLogic;
-    mqttLogic.setTopic("in_0", "out_0");
+    mqttLogic.setTopic((char*)"in_0", (char*)"out_0");
 
-    QCOMPARE(true,  mqttLogic.checkTopicSubscribe("in_0"));
-    QCOMPARE(false, mqttLogic.checkTopicSubscribe("bogus"));
+    QCOMPARE(true,  mqttLogic.checkTopicSubscribe((char*)"in_0"));
+    QCOMPARE(false, mqttLogic.checkTopicSubscribe((char*)"bogus"));
 
-    mqttLogic.setTopic("house/party1/data", "out_0");
-    QCOMPARE(true,  mqttLogic.checkTopicSubscribe("house/party1/data"));
-    QCOMPARE(false, mqttLogic.checkTopicSubscribe("house/party2/data"));
+    mqttLogic.setTopic((char*)"house/party1/data", (char*)"out_0");
+    QCOMPARE(true,  mqttLogic.checkTopicSubscribe((char*)"house/party1/data"));
+    QCOMPARE(false, mqttLogic.checkTopicSubscribe((char*)"house/party2/data"));
 }
 
 QTEST_MAIN(TestMQTT_Logic)
