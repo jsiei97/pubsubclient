@@ -1,6 +1,7 @@
 CONFIG += qtestlib
+QT     -= gui
 TEMPLATE = app
-TARGET = 
+TARGET =
 DEFINES += private=public
 DEFINES += protected=public
 
