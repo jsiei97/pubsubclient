@@ -5,7 +5,7 @@
 #include "MQTT_Logic.h"
 
 // Update these with values suitable for your network.
-byte mac[]    = {  0x11, 0x11, 0xBA, 0xFE, 0xFE, 0x01 };
+byte mac[]    = {  0xBA, 0xBE, 0xBA, 0xFE, 0x01, 0x01 };
 
 // The MQTT device name, this must be unique
 char project_name[]  = "pubsubclient_hw_EchoTest";
@@ -31,6 +31,8 @@ void callback(char* topic, byte* payload, unsigned int length)
     if(mTest.checkTopicSubscribe(topic))
     {
         Serial.println("Correct topic");
+        Serial.print("Topic:");
+        Serial.println(topic);
         if(length > 4)
         {
             if(     payload[0] == 'c' &&
@@ -42,12 +44,16 @@ void callback(char* topic, byte* payload, unsigned int length)
                 for( int f=4 ; f<length ; f++ )
                 {
                     Serial.println(payload[f]);
+                    payload[f-4] = payload[f];
+                    payload[f-3] = '\0';
                 }
 
-                //Now get the number and update testCountBack
-                //cnt=%d
+                Serial.print("Payload nr:");
+                Serial.println((char*)payload);
 
-                //testCountBack=
+                testCountBack=atoi((char*)payload);
+                Serial.print("Payload nr:");
+                Serial.println(testCountBack);
             }
         }
     }
@@ -59,19 +65,26 @@ void setup()
     testCountOut = 0;
     testCountBack = 0;
 
+    Serial.println("Setup begin:");
+
     //Config the mTest
     mTest.setTopic(
             "test/hw_EchoTest",
             "test/hw_EchoTest"
             );
 
+    Serial.println("Setup do eth:");
     //Start ethernet, if no ip is given then dhcp is used.
     Ethernet.begin(mac);
+
+    Serial.println("Setup connect:");
     if(client.connect(project_name))
     {
         client.publish( mTest.getTopicPublish(), "#BEGIN" );
         client.subscribe( mTest.getTopicSubscribe() );
     }
+
+    Serial.println("Setup done:");
 }
 
 void loop()
