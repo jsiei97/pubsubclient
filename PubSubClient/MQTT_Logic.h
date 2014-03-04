@@ -37,6 +37,7 @@ class MQTT_Logic
 
     public:
         MQTT_Logic();
+        ~MQTT_Logic();
 
         bool setTopic(char* topicSubscribe, char* topicPublish);
         char* getTopicSubscribe();

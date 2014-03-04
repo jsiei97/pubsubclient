@@ -36,6 +36,15 @@ MQTT_Logic::MQTT_Logic()
     topicOut = NULL;
 }
 
+MQTT_Logic::~MQTT_Logic()
+{
+    if( topicIn != NULL )
+        free(topicIn);
+
+    if(topicOut != NULL )
+        free(topicOut);
+}
+
 
 /**
  * What mqtt topics this sensor will use.
@@ -46,6 +55,12 @@ MQTT_Logic::MQTT_Logic()
  */
 bool MQTT_Logic::setTopic(char* topicSubscribe, char* topicPublish)
 {
+    if( topicIn != NULL )
+        free(topicIn);
+
+    if(topicOut != NULL )
+        free(topicOut);
+
     int len = strlen(topicSubscribe);
     topicIn = (char*)malloc(len+1);
     memcpy(topicIn , topicSubscribe, len);
