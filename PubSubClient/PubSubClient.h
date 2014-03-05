@@ -7,8 +7,8 @@
 #ifndef PubSubClient_h
 #define PubSubClient_h
 
-#include <Arduino.h>
-#include "Client.h"
+#include "Ethernet.h"
+#include "EthernetClient.h"
 
 // MQTT_MAX_PACKET_SIZE : Maximum packet size
 #define MQTT_MAX_PACKET_SIZE 128
@@ -39,40 +39,31 @@
 
 class PubSubClient {
 private:
-   Client* _client;
+   EthernetClient _client;
    uint8_t buffer[MQTT_MAX_PACKET_SIZE];
    uint16_t nextMsgId;
    unsigned long lastOutActivity;
    unsigned long lastInActivity;
    bool pingOutstanding;
    void (*callback)(char*,uint8_t*,unsigned int);
-   uint16_t readPacket(uint8_t*);
+   uint16_t readPacket();
    uint8_t readByte();
    boolean write(uint8_t header, uint8_t* buf, uint16_t length);
    uint16_t writeString(char* string, uint8_t* buf, uint16_t pos);
    uint8_t *ip;
    char* domain;
    uint16_t port;
-   Stream* stream;
 public:
    PubSubClient();
-   PubSubClient(uint8_t *, uint16_t, void(*)(char*,uint8_t*,unsigned int),Client& client);
-   PubSubClient(uint8_t *, uint16_t, void(*)(char*,uint8_t*,unsigned int),Client& client, Stream*);
-   PubSubClient(char*, uint16_t, void(*)(char*,uint8_t*,unsigned int),Client& client);
-   PubSubClient(char*, uint16_t, void(*)(char*,uint8_t*,unsigned int),Client& client, Stream*);
+   PubSubClient(uint8_t *, uint16_t, void(*)(char*,uint8_t*,unsigned int));
+   PubSubClient(char*, uint16_t, void(*)(char*,uint8_t*,unsigned int));
    boolean connect(char *);
-   boolean connect(char *, char *, char *);
-   boolean connect(char *, char *, uint8_t, uint8_t, char *);
-   boolean connect(char *, char *, char *, char *, uint8_t, uint8_t, char*);
+   boolean connect(char*, char*, uint8_t, uint8_t, char*);
    void disconnect();
    boolean publish(char *, char *);
    boolean publish(char *, uint8_t *, unsigned int);
    boolean publish(char *, uint8_t *, unsigned int, boolean);
-   boolean publish_P(char *, uint8_t PROGMEM *, unsigned int, boolean);
    boolean subscribe(char *);
-   boolean subscribe(char *, uint8_t qos);
-   boolean unsubscribe(char *);
-   boolean puback(uint16_t msgId);
    boolean loop();
    boolean connected();
 };
